@@ -10,12 +10,12 @@ pub struct FormData {
 }
 
 #[tracing::instrument(
-name = "Adding a new subscriber",
-skip(form, pool),
-fields(
-email = % form.email,
-name = % form.name
-)
+    name = "Adding a new subscriber",
+    skip(form, pool),
+    fields(
+        email = %form.email,
+        name = %form.name
+    )
 )]
 pub async fn subscribe(
     form: web::Form<FormData>,
