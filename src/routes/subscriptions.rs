@@ -1,4 +1,4 @@
-use actix_web::{HttpResponse, web};
+use actix_web::{web, HttpResponse};
 use chrono::Utc;
 use sqlx::PgPool;
 use uuid::Uuid;
@@ -28,13 +28,10 @@ pub async fn subscribe(
 }
 
 #[tracing::instrument(
-name = "Saving new subscriber details in the database",
-skip(form, pool)
+    name = "Saving new subscriber details in the database",
+    skip(form, pool)
 )]
-pub async fn insert_subscriber(
-    pool: &PgPool,
-    form: &FormData,
-) -> Result<(), sqlx::Error> {
+pub async fn insert_subscriber(pool: &PgPool, form: &FormData) -> Result<(), sqlx::Error> {
     sqlx::query!(
         r#"
     INSERT INTO subscriptions (id, email, name, subscribed_at)
@@ -45,11 +42,11 @@ pub async fn insert_subscriber(
         form.name,
         Utc::now()
     )
-        .execute(pool)
-        .await
-        .map_err(|e| {
-            tracing::error!("Failed to execute query: {:?}", e);
-            e
-        })?;
+    .execute(pool)
+    .await
+    .map_err(|e| {
+        tracing::error!("Failed to execute query: {:?}", e);
+        e
+    })?;
     Ok(())
 }

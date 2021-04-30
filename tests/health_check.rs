@@ -1,14 +1,9 @@
 use std::net::TcpListener;
 
-use sqlx::{
-    Connection,
-    Executor,
-    PgConnection,
-    PgPool,
-};
+use sqlx::{Connection, Executor, PgConnection, PgPool};
 use uuid::Uuid;
 
-use zero2prod::configuration::{DatabaseSettings, get_configuration};
+use zero2prod::configuration::{get_configuration, DatabaseSettings};
 use zero2prod::startup::run;
 use zero2prod::telemetry::{get_subscriber, init_subscriber};
 
@@ -133,7 +128,7 @@ async fn subscribe_returns_a_400_when_data_is_missing() {
     let test_cases = vec![
         ("name=le%20guin", "missing the email"),
         ("email=ursula_le_guin%40gmail.com", "missing the name"),
-        ("", "missing both name and email")
+        ("", "missing both name and email"),
     ];
 
     for (invalid_body, error_message) in test_cases {
